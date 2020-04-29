@@ -1,0 +1,73 @@
+---
+title: "DayOne preprocess for mysterybox"
+author: "Ian Lo"
+date: "10/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r }
+# Load the package required to read JSON files.
+library(jsonlite)
+
+
+# Give the input file name to the function.
+#Ian Android
+result.Android <- fromJSON("/Volumes/Untitled/Ian/DayOne/AllEntries.json")
+```
+```{r}
+#look at the first element of result.Android$entries 
+result.Android$entries[1,] #this is the Day One data for a single entry
+```
+
+```{r}
+#work with one entry 
+single.entry <- result.Android$entries[1,]
+
+#flatten to make it easier to read
+flat.single.entry <- flatten(single.entry)
+```
+
+```{r}
+# unflatten(flat.single.entry)
+```
+
+```{r}
+#only display fields I want
+flat.single.entry[,c("creationDate",  
+                     "location.localityName", 
+                     "location.administrativeArea", 
+                     "location.country",
+                     "text",
+                     "timeZone",
+                     "uuid",
+                     "weather.conditionsDescription",
+                     "weather.pressureMB",
+                     "weather.relativeHumidity",
+                     "weather.temperatureCelsius",
+                     "weather.visibilityKM",
+                     "weather.weatherCode",
+                     "weather.weatherServiceName",
+                     "weather.windBearing",
+                     "weather.windChillCelsius",
+                     "weather.windSpeedKPH"
+                     )]
+```
+
+```{r}
+#don't like this...maybe try excluding the fields I don't want
+# masked.single.entry <- (single.entry[,  
+#                      "location"])[c("longitude", "localityName")]
+# 
+# flat.single.entry$location <- masked.single.entry
+```
+
+```{r}
+masked.single.entry <- (single.entry[,(-"audios") ])
+
+
+```
+

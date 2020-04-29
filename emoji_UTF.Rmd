@@ -1,0 +1,55 @@
+---
+title: "DSI_AT2_DayOne"
+author: "Ian Lo"
+date: "05/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r }
+# Load the package required to read JSON files.
+library("rjson")
+
+# Give the input file name to the function.
+#Ian Android
+result.Android <- fromJSON(file = "/Volumes/Untitled/DSI AT2/Ian - DSI AT2 050420/AllEntries.json")
+
+#Zoe iOS
+result.iOS <- fromJSON(file = "/Volumes/Untitled/DSI AT2/Zoe Barrett Data_030420/Day One /Zoe-Journal_030420.json")
+
+```
+
+```{r}
+
+entry <- result.iOS[["entries"]][[2]]
+entry.df <- data.frame(entry, stringsAsFactors = F)
+
+```
+
+```{r}
+#one entry that has both emojis and text
+emoji.and.text <- result.iOS[["entries"]][[2]]$text
+
+#emoji is read in as a string of characters
+emoji.and.text
+```
+
+
+```{r}
+#check to see how R prints emojis
+library(utf8)
+
+#depending on R method it can convert to emoji or just print the string of characters
+utf8_print((emoji.and.text), )
+print(emoji.and.text)
+cat(emoji.and.text)
+```
+
+```{r}
+
+```
+
