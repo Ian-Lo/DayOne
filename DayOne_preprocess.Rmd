@@ -12,20 +12,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r }
 # Load the package required to read JSON files.
 library(jsonlite)
-
+file = "./Journal_ZB_290420.json"
 
 # Give the input file name to the function.
-#Ian Android
-result.Android <- fromJSON("/Volumes/Untitled/Ian/DayOne/AllEntries.json")
+json.dayone <- fromJSON(file)
 ```
 ```{r}
-#look at the first element of result.Android$entries 
-result.Android$entries[1,] #this is the Day One data for a single entry
+#look at the first element of json.dayone$entries 
+json.dayone$entries[1,] #this is the Day One data for a single entry
 ```
 
 ```{r}
 #work with one entry 
-single.entry <- result.Android$entries[1,]
+single.entry <- json.dayone$entries[1,]
 
 #flatten to make it easier to read
 flat.single.entry <- flatten(single.entry)
@@ -58,16 +57,53 @@ flat.single.entry[,c("creationDate",
 ```
 
 ```{r}
-#don't like this...maybe try excluding the fields I don't want
-# masked.single.entry <- (single.entry[,  
-#                      "location"])[c("longitude", "localityName")]
-# 
-# flat.single.entry$location <- masked.single.entry
+out<- c()
+for (x in 1:nrow(json.dayone[["entries"]])){
+  single.entry <- flatten(json.dayone[["entries"]][x,])
+  
+  #specify fields to export for analysis
+  exp_entry <- (single.entry[,c("text",
+                                "creationDate",  
+                                "location.localityName", 
+                                "location.administrativeArea", 
+                                "location.country",
+                                "timeZone",
+                                "uuid",
+                                "weather.conditionsDescription",
+                                "weather.pressureMB",
+                                "weather.relativeHumidity",
+                                "weather.temperatureCelsius",
+                                "weather.visibilityKM",
+                                "weather.weatherCode",
+                                "weather.weatherServiceName",
+                                "weather.windBearing",
+                                "weather.windChillCelsius",
+                                "weather.windSpeedKPH"
+                                )
+                             ]
+                )
+  
+    num_words <- sapply(strsplit(exp_entry$text, " "), length)
+    # print(((num_words)))
+    
+    if (num_words < 4) {
+      out$emoji <- rbind(out$emoji, exp_entry)
+    }else{
+      out$text <- rbind(out$text, exp_entry)
+    }
+    # print(exp_entry)
+}
+  
+
 ```
 
+
 ```{r}
-masked.single.entry <- (single.entry[,(-"audios") ])
+write.csv(out$emoji, file = "emoji_output.csv")
+write.csv(out$text, file = "text_output.csv")
+```
 
 
+```{r}
 ```
 
