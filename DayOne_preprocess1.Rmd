@@ -98,11 +98,25 @@ for (x in 1:nrow(json.dayone[["entries"]])){
 
 ```
 
+```{r}
+out$emoji$mood <- c(rep("add your mood data as a number here", nrow(out$emoji)))
+```
+
+
+```{r}
+out$emoji <- cbind(text = out$emoji[,1], mood = out$emoji[,18], out$emoji[,2:17])
+```
+
+
+```{r}
+```
 
 ```{r}
 file.noext <- tools::file_path_sans_ext(filename)
 write.csv(out$emoji, file = paste((file.noext), "_emoji_output.csv", sep = ""))
+print(paste((file.noext), "_emoji_output.csv", sep = ""))
 write.csv(out$text, file = paste((file.noext), "_text_output.csv", sep = ""))
+print(paste((file.noext), "_text_output.csv", sep = ""))
 ```
 
 
